@@ -1,9 +1,6 @@
 import express, { Express } from 'express';
-import morgan from 'morgan';
-import helmet from 'helmet';
 import cors from 'cors';
-import config from '../config.json';
-import { getFilesWithKeyword } from './utils/getFilesWithKeyword';
+import { api } from './api'
 
 const app: Express = express();
 
@@ -11,29 +8,16 @@ const app: Express = express();
  *                              Basic Express Middlewares
  ***********************************************************************************/
 
-app.set('json spaces', 4);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Handle logs in console during development
-if (process.env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-  app.use(cors());
-}
-
-// Handle security and origin in production
-if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
-  app.use(helmet());
-}
+app.use(cors());
 
 /************************************************************************************
  *                               Register all routes
  ***********************************************************************************/
 
-getFilesWithKeyword('router', __dirname + '/app').forEach((file: string) => {
-  const { router } = require(file);
-  app.use('/', router);
-})
+api.connect('/api', app);
+
 /************************************************************************************
  *                               Express Error Handling
  ***********************************************************************************/
