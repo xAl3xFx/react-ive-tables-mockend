@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
+    "runProd" : "build && start",
     "start": "node ./build/src/index.js",
     "dev": "ts-node ./src/index.ts",
     "dev:nodemon": "nodemon -w src -e ts,json -x ts-node ./src/index.ts",
